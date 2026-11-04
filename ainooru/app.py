@@ -15,7 +15,7 @@ from . import meter_photo, store
 from .charts import cycle_chart
 from .forecast import Reading, default_end, simulate
 from .i18n import LANGS, S, fmt_day, translator
-from .tariff import CURRENT, TN_2024
+from .tariff import CURRENT, TN_2025
 
 HERE = Path(__file__).resolve().parent
 app = FastAPI(title="Ainooru")
@@ -87,7 +87,7 @@ def home(request: Request):
     t = translator(lang)
     cycle = store.get_cycle()
     prefill = request.query_params.get("prefill", "")
-    ctx = {"error": error_text(request, t), "today": today(), "tariff": CURRENT, "old_tariff": TN_2024,
+    ctx = {"error": error_text(request, t), "today": today(), "tariff": CURRENT, "old_tariff": TN_2025,
            "t": t, "lang": lang, "day": lambda d, year=False: fmt_day(d, lang, year),
            "photo": meter_photo.available(), "prefill": prefill if prefill.isdigit() else ""}
     if cycle is None:

@@ -92,10 +92,10 @@ uv run python eval/backtest.py
 
 * Only energy charges are compared. Fixed charges depend on connected load and are the same either side of 500.
 * The noise settings were fitted on one French household's data, not on Chennai homes. The backtest covers one home only.
-* The tariff figures come from published reporting of G.O. (Ms) No. 50 and TNERC Order No. 5 of 2026; see `DESIGN.md` for sources. Check them against your own bill.
+* The tariff figures come from TNERC Order No. 4 of 2026 (consumer-payable rates per slab) and TNERC Order No. 5 of 2026 (200 free units up to 500), both on tnerc.tn.gov.in; see `DESIGN.md`. A future tariff order would need a new table in `ainooru/tariff.py`.
 * Appliance conversions use typical ratings (for example 1.2 units an hour for a 1.5 ton inverter split AC) and say so on screen.
 * Photo reading has been checked on a rendered meter display and with mocked responses, not on a broad set of real meter photos. It only ever suggests a number for the user to confirm.
 
 ## Credits
 
-FastAPI, Jinja2, Uvicorn, NumPy, Pillow, httpx and pytest. Optional photo reading uses the open Qwen model served by Groq. Backtest data: UCI Individual household electric power consumption (Hebrail and Berard, 2006, CC BY 4.0). Tariff facts are sourced in `DESIGN.md`. Built for LaunchPad Hacks 2026; all code was written during the event.
+FastAPI, Jinja2, Uvicorn, NumPy, Pillow, httpx and pytest. Optional photo reading uses the open Qwen model served by Groq. Backtest data: UCI Individual household electric power consumption (Hebrail and Berard, 2006, CC BY 4.0). Tariff facts come from TNERC orders, cited in `DESIGN.md`. Built for LaunchPad Hacks 2026; all code was written during the event.

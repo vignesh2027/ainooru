@@ -99,23 +99,23 @@ TN_2026 = Tariff(
     at_or_below=(Slab(200, D("0")), Slab(400, D("4.70")), Slab(500, D("6.30"))),
     above=_ABOVE_500,
     source=(
-        "G.O. (Ms) No. 50 dated 10 May 2026 and TNERC Order No. 5 of 2026: 200 free units "
-        "for consumers at or below 500 units per bimonthly cycle. Slab rates and worked "
-        "examples as reported in May 2026 press coverage (sources in DESIGN.md)."
+        "TNERC Order No. 5 of 2026 (26 May 2026), under G.O. (Ms) No. 50 dated 10 May 2026: 200 free units "
+        "bimonthly for domestic consumers up to 500 units. Other slab rates: consumer-payable energy charges "
+        "in TNERC Order No. 4 of 2026 (27 April 2026)."
     ),
 )
 
-TN_2024 = Tariff(
-    key="tn-lt1a-2024-07",
-    name="Tamil Nadu domestic (LT-IA), July 2024 to 9 May 2026",
-    effective_from=date(2024, 7, 1),
+TN_2025 = Tariff(
+    key="tn-lt1a-2025-07",
+    name="Tamil Nadu domestic (LT-IA), 1 July 2025 to 9 May 2026",
+    effective_from=date(2025, 7, 1),
     threshold=500,
     at_or_below=(Slab(100, D("0")), Slab(200, D("2.35")), Slab(400, D("4.70")), Slab(500, D("6.30"))),
     above=_ABOVE_500,
-    source="TNERC tariff schedule for LT-IA domestic consumers before G.O. (Ms) No. 50 of 2026.",
+    source="Consumer-payable LT-IA energy charges from 1 July 2025, TNERC Order No. 4 of 2026 (27 April 2026).",
 )
 
-TARIFFS = {t.key: t for t in (TN_2026, TN_2024)}
+TARIFFS = {t.key: t for t in (TN_2026, TN_2025)}
 CURRENT = TN_2026
 
 
@@ -124,7 +124,7 @@ def tariff_on(day: date) -> Tariff:
     for t in sorted(TARIFFS.values(), key=lambda t: t.effective_from, reverse=True):
         if day >= t.effective_from:
             return t
-    return TN_2024
+    return TN_2025
 
 
 @lru_cache(maxsize=8)

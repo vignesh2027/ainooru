@@ -118,12 +118,17 @@ Tamil Nadu LT-IA domestic energy charges per bimonthly cycle, telescopic:
 | 801 to 1000 | | | 10.50 |
 | above 1000 | | | 11.55 |
 
-* The current table and the worked examples (500 units cost Rs 1,570, 600 units cost Rs 2,880) come from Verified.RealEstate, "Tamil Nadu Electricity Charges 2026", May 2026.
-* G.O. 50, TNERC Order No. 5 of 2026 and the 10 May 2026 start date come from SolarQuarter (29 May 2026) and Mercom India.
-* The pre-May 101 to 200 rate of Rs 2.35 is consistent with DT Next's "households can now save Rs 235": 100 units at 2.35 is 235.
+**Primary sources (checked 4 Nov 2026 on tnerc.tn.gov.in, Tariff Orders page):**
+
+* TNERC Order No. 4 of 2026, "Provisional Tariff Subsidy Order for FY 2026-27", dated 27 April 2026 (https://tnerc.tn.gov.in/Orders/files/TO-Order%20No%20280420261156.pdf). Its section "Domestic Consumers - LT Tariff I-A" lists, for each slab, the approved tariff, the subsidy paid by the Government and the energy charge payable by the consumer from 1 July 2025. Every rate in the two right-hand columns above is that payable figure, for example 101 to 200 units at 495 minus 260, which is 235 paise.
+* TNERC Order No. 5 of 2026, "Additional Tariff Subsidy Order for FY 2026-27 due to increase of free electricity of total 200 units bimonthly to domestic consumers who consumes electricity upto 500 units bimonthly", dated 26 May 2026 (https://tnerc.tn.gov.in/Orders/files/TO-Order%20No%20270520261449.pdf). It records G.O. (Ms) No. 50 dated 10 May 2026, which makes 200 units free from 10 May 2026 for consumers up to 500 units, through an extra subsidy of 2.35 per unit on 101 to 200. It also states that consumers above 500 units keep "the existing tariff structure... including free electricity of 100 units bimonthly".
+* `tests/test_tariff.py` rebuilds every slab rate as approved tariff minus subsidy from these two orders' tables.
+
+**Secondary sources that agree:** Verified.RealEstate, "Tamil Nadu Electricity Charges 2026" (May 2026), gives the worked examples of 500 units at Rs 1,570 and 600 units at Rs 2,880, which the tests also pin. SolarQuarter (29 May 2026) and Mercom India report the order, and DT Next's "save Rs 235" equals 100 units at 2.35.
+
 * Fixed charges depend on connected load and do not change at the cliff, so Ainooru leaves them out of the comparison and says so on screen.
 
-Nothing in the tariff is hard-coded in templates. It lives in one versioned table in `ainooru/tariff.py`, and tests pin the published worked examples.
+Nothing in the tariff is hard-coded in templates. It lives in one versioned table in `ainooru/tariff.py`, and tests pin both the official per-slab rates and the published worked examples.
 
 ## How the forecast works
 
