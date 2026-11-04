@@ -4,7 +4,7 @@ Ainooru (ஐநூறு) is Tamil for "five hundred", the bimonthly unit limit 
 
 ## The person this is for
 
-The owner is a final-year CSE student in Chennai who lives with his parents. The ideas below all come from problems in that life: the family electricity bill, campus placement season, the monsoon commute, the final-year viva and hostel food. Each one has a person we can name as the user.
+The owner is a final-year CSE student in Chennai. The ideas below all come from problems in that life: the household electricity bill, campus placement season, the monsoon commute, the final-year viva and hostel food. Each one has a person we can name as the user.
 
 Hard constraints from the brief: the idea must be new (not Padi, Kavach, Haat or Merged), demoable in 2 minutes, free to run with no card, honest about numbers, and built in Python or Go with server-rendered HTML.
 
@@ -17,7 +17,7 @@ Tamil Nadu bills domestic electricity every two months. Since G.O. (Ms) No. 50 o
 * 500 units cost Rs 1,570.00 in energy charges.
 * 501 units cost Rs 2,048.40.
 
-That one extra unit costs **Rs 478.40**. Before May 2026 the same step cost Rs 243.40, so the cliff almost doubled this year. A household sees its consumption only when the meter reader comes, by which time it is too late. My parents check the meter by eye and guess.
+That one extra unit costs **Rs 478.40**. Before May 2026 the same step cost Rs 243.40, so the cliff almost doubled this year. A household sees its consumption only when the meter reader comes, by which time it is too late.
 
 Ainooru takes a few meter readings, which anyone can read off the LCD in ten seconds. It runs a probabilistic forecast of where the cycle will end, allowing for the uncertain reading date, and reports three things:
 
@@ -27,7 +27,7 @@ Ainooru takes a few meter readings, which anyone can read off the LCD in ten sec
 
 It also says when the cliff is already lost, so the family stops sacrificing comfort for nothing.
 
-The user is a Tamil Nadu household on LT-IA domestic tariff, starting with my own parents. The need is public: the cut-off has drawn press coverage and complaints from households "slightly above 500 units".
+The user is a Tamil Nadu household on the LT-IA domestic tariff, such as my own family in Chennai. The need is public: the cut-off has drawn press coverage and complaints from households "slightly above 500 units".
 
 ### 2. Drive Desk: a placement-drive notice parser
 
@@ -68,7 +68,7 @@ The fifth column, **Gallery originality**, is my own check. The LaunchPad galler
 
 **Ainooru.**
 * Innovation 5. No student tool I found treats a subsidy cliff as a decision problem under uncertainty. The idea of a "price of one saved unit" that swings from Rs 6 to hundreds of rupees is new to most people and easy to state.
-* Usefulness 5. The cliff is in force now, applies to about 2 crore domestic connections, and costs a real household Rs 478 or more for one unit. The press coverage gives evidence of need. The user (my parents) can try it this week.
+* Usefulness 5. The cliff is in force now, applies to about 2 crore domestic connections, and costs a real household Rs 478 or more for one unit. The press coverage gives evidence of need. My own family can try it this week.
 * Implementation 4. The tariff engine is exact and testable against published worked examples, and the forecaster is a small, honest Monte Carlo. The risk is calibration, which the evaluation plan below covers.
 * Design 5. The core screen holds one number, one chart and one sentence of advice. Tamil labels make it usable by the actual user.
 * Gallery originality 5. No comparable gallery has anything on utility tariffs.
@@ -77,7 +77,7 @@ The fifth column, **Gallery originality**, is my own check. The LaunchPad galler
 
 **Subway Sense.** The idea is strong, but no public ground truth for closures exists, so accuracy cannot be shown honestly. The demo also depends on it raining on the day. Implementation is 2.
 
-**Viva Mock.** It is useful, but it falls in the crowded "AI tutor or interviewer" space. Gallery originality is 2.
+**Viva Mock.** It is useful, but it falls in the crowded space of automated tutors and mock interviewers. Gallery originality is 2.
 
 **Mess Count.** It needs data from a real mess that I do not have, and food-waste dashboards are common.
 
