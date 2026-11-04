@@ -6,12 +6,12 @@ from datetime import date, timedelta
 from pathlib import Path
 from urllib.parse import urlencode
 
-from fastapi import FastAPI, Form, Request
+from fastapi import FastAPI, File, Form, Request, UploadFile
 from fastapi.responses import HTMLResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-from . import store
+from . import meter_photo, store
 from .charts import cycle_chart
 from .forecast import Reading, default_end, simulate
 from .i18n import LANGS, S, fmt_day, translator
@@ -32,6 +32,8 @@ def rupees(v: float, decimals: int = 0) -> str:
 
 
 templates.env.filters["rupees"] = rupees
+# Cache-busting stamp so browsers pick up a changed stylesheet.
+templates.env.globals["css_v"] = int((HERE / "static" / "style.css").stat().st_mtime)
 
 
 def today() -> date:
@@ -84,8 +86,10 @@ def home(request: Request):
     lang = lang_of(request)
     t = translator(lang)
     cycle = store.get_cycle()
+    prefill = request.query_params.get("prefill", "")
     ctx = {"error": error_text(request, t), "today": today(), "tariff": CURRENT, "old_tariff": TN_2024,
-           "t": t, "lang": lang, "day": lambda d, year=False: fmt_day(d, lang, year)}
+           "t": t, "lang": lang, "day": lambda d, year=False: fmt_day(d, lang, year),
+           "photo": meter_photo.available(), "prefill": prefill if prefill.isdigit() else ""}
     if cycle is None:
         return templates.TemplateResponse(request, "setup.html", ctx)
     stored = store.readings()
@@ -149,6 +153,20 @@ def add_reading(day: date = Form(...), value: float = Form(...)):
         return back("err_lower", v=f"{value:g}", floor=f"{floor:g}")
     store.add_reading(day, value)
     return back()
+
+
+MAX_PHOTO_BYTES = 15 * 1024 * 1024
+
+
+@app.post("/photo")
+async def read_photo(photo: UploadFile = File(...)):
+    data = await photo.read(MAX_PHOTO_BYTES + 1)
+    if not data or len(data) > MAX_PHOTO_BYTES:
+        return back("err_photo")
+    value = meter_photo.read_meter(data)
+    if value is None:
+        return back("err_photo")
+    return RedirectResponse(f"/?prefill={value}#add-h", status_code=303)
 
 
 @app.post("/readings/{reading_id}/delete")

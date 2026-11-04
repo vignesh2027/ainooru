@@ -40,6 +40,19 @@ Open http://localhost:8000. Click **Try it with sample readings** to see a house
 
 Readings are stored in `data/ainooru.sqlite3` on your own machine. Set `AINOORU_DB` to use another file.
 
+The interface is in English and Tamil; use the switch at the top right.
+
+### Optional: read the meter from a photo
+
+Typing the reading always works. To also allow a photo of the meter, put a free Groq API key in a `.env` file:
+
+```sh
+cp .env.example .env
+# then edit .env and set GROQ_API_KEY
+```
+
+Restart the server and an "Or take a photo of the meter" option appears under the reading box. The photo is shrunk and sent to an open vision model (`qwen/qwen3.8-27b` on Groq) that returns only the kWh number. Ainooru puts the number in the box for you to check against the meter; nothing is saved until you press Add, and the photo is not stored. Without a key the option is simply hidden.
+
 ## Tests
 
 ```sh
@@ -80,8 +93,9 @@ uv run python eval/backtest.py
 * Only energy charges are compared. Fixed charges depend on connected load and are the same either side of 500.
 * The noise settings were fitted on one French household's data, not on Chennai homes. The backtest covers one home only.
 * The tariff figures come from published reporting of G.O. (Ms) No. 50 and TNERC Order No. 5 of 2026; see `DESIGN.md` for sources. Check them against your own bill.
-* The AC conversion assumes a typical 1.2 units an hour for a 1.5 ton inverter split AC.
+* Appliance conversions use typical ratings (for example 1.2 units an hour for a 1.5 ton inverter split AC) and say so on screen.
+* Photo reading has been checked on a rendered meter display and with mocked responses, not on a broad set of real meter photos. It only ever suggests a number for the user to confirm.
 
 ## Credits
 
-FastAPI, Jinja2, Uvicorn, NumPy and pytest. Tariff facts are sourced in `DESIGN.md`. Built for LaunchPad Hacks 2026; all code was written during the event.
+FastAPI, Jinja2, Uvicorn, NumPy, Pillow, httpx and pytest. Optional photo reading uses the open Qwen model served by Groq. Backtest data: UCI Individual household electric power consumption (Hebrail and Berard, 2006, CC BY 4.0). Tariff facts are sourced in `DESIGN.md`. Built for LaunchPad Hacks 2026; all code was written during the event.

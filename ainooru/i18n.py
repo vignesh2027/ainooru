@@ -161,7 +161,21 @@ S: dict[str, dict[str, str]] = {
               "ஆண்டுகளில் சோதிக்கப்பட்டது (பரவல் {s}, தொடர்ச்சி {p}). கணக்குக் காலம் {a} முதல் சுமார் {b} வரை.",
     },
     "btn_new": {"en": "Start a new cycle", "ta": "புதிய கணக்குக் காலத்தைத் தொடங்கு"},
+    "photo_label": {"en": "Or take a photo of the meter", "ta": "அல்லது மீட்டரைப் புகைப்படம் எடுக்கவும்"},
+    "btn_photo": {"en": "Read the photo", "ta": "புகைப்படத்தைப் படி"},
+    "photo_note": {
+        "en": "The photo is sent to an open model on Groq to read the number. Ainooru does not keep it.",
+        "ta": "எண்ணைப் படிக்க, புகைப்படம் Groq இல் உள்ள ஒரு திறந்த மாதிரிக்கு அனுப்பப்படும். ஐநூறு அதைச் சேமிப்பதில்லை.",
+    },
+    "prefill_note": {
+        "en": "Read from your photo: {v}. Check it matches the meter, then press Add.",
+        "ta": "உங்கள் புகைப்படத்திலிருந்து படித்தது: {v}. மீட்டருடன் ஒப்பிட்டுச் சரிபார்த்து, பிறகு சேர் அழுத்தவும்.",
+    },
     # Errors
+    "err_photo": {
+        "en": "Could not read a number from that photo. Please type the reading instead.",
+        "ta": "அந்தப் புகைப்படத்திலிருந்து எண்ணைப் படிக்க முடியவில்லை. அளவீட்டைத் தட்டச்சு செய்யவும்.",
+    },
     "err_future": {"en": "The last bill's reading date cannot be in the future.", "ta": "கடைசி கணக்கெடுப்பு தேதி எதிர்காலத்தில் இருக்க முடியாது."},
     "err_negative": {"en": "A meter reading cannot be negative.", "ta": "மீட்டர் அளவீடு எதிர்மறையாக இருக்க முடியாது."},
     "err_end": {"en": "The next reading date must be after the last one.", "ta": "அடுத்த கணக்கெடுப்பு தேதி கடைசி தேதிக்குப் பிறகு இருக்க வேண்டும்."},

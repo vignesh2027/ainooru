@@ -58,10 +58,19 @@
     <h2 id="add-h">{{ t("add_h") }}</h2>
     <form method="post" action="/readings" class="inline">
       <div class="field"><label for="day">{{ t("f_date") }}</label><input type="date" id="day" name="day" value="{{ today }}" max="{{ today }}" min="{{ cycle.start_day }}" required></div>
-      <div class="field"><label for="value">{{ t("f_reading") }}</label><input type="number" id="value" name="value" min="0" step="1" inputmode="numeric" required></div>
+      <div class="field"><label for="value">{{ t("f_reading") }}</label><input type="number" id="value" name="value" min="0" step="1" inputmode="numeric" required value="{{ prefill }}"{% if prefill %} autofocus{% endif %}></div>
       <div><button type="submit">{{ t("btn_add") }}</button></div>
     </form>
+    {% if prefill %}<p class="prefill" role="status">{{ t("prefill_note", v=prefill) }}</p>{% endif %}
     <p class="fine">{{ t("add_note") }}</p>
+    {% if photo %}
+    <form method="post" action="/photo" enctype="multipart/form-data" class="photo-form">
+      <label for="photo">{{ t("photo_label") }}</label>
+      <div class="inline"><input type="file" id="photo" name="photo" accept="image/*" capture="environment" required>
+      <button class="ghost" type="submit">{{ t("btn_photo") }}</button></div>
+      <p class="fine">{{ t("photo_note") }}</p>
+    </form>
+    {% endif %}
   </section>
   <section class="card">
     <h2>{{ t("readings_h") }}</h2>

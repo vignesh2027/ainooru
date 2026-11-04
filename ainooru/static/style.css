@@ -120,3 +120,7 @@ footer { color: var(--muted); font-size: .85rem; padding: 24px 0; border-top: 1p
 .inline-form { display: inline; }
 button.plain { color: inherit; text-decoration: underline; }
 :lang(ta) h1 { line-height: 1.35; }
+.prefill { background: var(--accent-soft); color: var(--accent); border-radius: 10px; padding: 10px 12px; font-weight: 600; font-size: .92rem; }
+.photo-form { margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--line); }
+.photo-form .inline { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 6px; }
+.photo-form input[type=file] { font: inherit; font-size: .9rem; max-width: 100%; }
