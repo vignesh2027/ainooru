@@ -25,6 +25,8 @@ That one unit costs ₹478.40. Before May 2026 it cost ₹243.40, so the cliff h
 
 ![Dashboard with sample readings](docs/screenshots/dashboard.png)
 
+The same screen in Tamil: [docs/screenshots/dashboard-tamil.png](docs/screenshots/dashboard-tamil.png). Phone views and the photo step are in `docs/screenshots/`.
+
 ## Run it
 
 You need [uv](https://docs.astral.sh/uv/). It installs the right Python for you.
