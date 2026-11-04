@@ -1,0 +1,172 @@
+{
+  "dataset": "UCI Individual household electric power consumption (Hebrail and Berard, 2006), CC BY 4.0",
+  "days": [
+    "2006-12-16",
+    "2010-11-26"
+  ],
+  "scale_to_threshold": 0.3377321481867727,
+  "fit_cycles": 33,
+  "test_cycles": 94,
+  "test_forecasts": 282,
+  "test_crossing_rate": 0.7127659574468085,
+  "fitted_noise": {
+    "sigma": 0.2,
+    "phi": 0.9
+  },
+  "grid_top5": [
+    {
+      "brier": 0.08389416414141414,
+      "sigma": 0.2,
+      "phi": 0.9
+    },
+    {
+      "brier": 0.08398747727272728,
+      "sigma": 0.3,
+      "phi": 0.8
+    },
+    {
+      "brier": 0.08402802525252526,
+      "sigma": 0.25,
+      "phi": 0.9
+    },
+    {
+      "brier": 0.08425025252525253,
+      "sigma": 0.35,
+      "phi": 0.8
+    },
+    {
+      "brier": 0.08425408333333334,
+      "sigma": 0.4,
+      "phi": 0.7
+    }
+  ],
+  "results": [
+    {
+      "method": "Straight line",
+      "brier": 0.10283687943262411,
+      "log_loss_clipped": 0.4825981218602499,
+      "accuracy_at_half": 0.8971631205673759,
+      "missed_crossings": 15,
+      "false_alarms": 14,
+      "median_abs_error_units": 38.0
+    },
+    {
+      "method": "Ainooru, provisional noise",
+      "brier": 0.06588872074468084,
+      "log_loss_clipped": 0.20564303091369895,
+      "accuracy_at_half": 0.8865248226950354,
+      "missed_crossings": 14,
+      "false_alarms": 18,
+      "median_abs_error_units": 32.0,
+      "coverage_80": 0.776595744680851
+    },
+    {
+      "method": "Ainooru, fitted noise",
+      "brier": 0.06985804033687942,
+      "log_loss_clipped": 0.22646525963319356,
+      "accuracy_at_half": 0.9042553191489362,
+      "missed_crossings": 15,
+      "false_alarms": 12,
+      "median_abs_error_units": 32.0,
+      "coverage_80": 0.8439716312056738
+    }
+  ],
+  "by_check_day": [
+    {
+      "day": 15,
+      "n": 94,
+      "straight_line_brier": 0.18085106382978725,
+      "ainooru_brier": 0.11428274667553191
+    },
+    {
+      "day": 30,
+      "n": 94,
+      "straight_line_brier": 0.0851063829787234,
+      "ainooru_brier": 0.06480543816489362
+    },
+    {
+      "day": 45,
+      "n": 94,
+      "straight_line_brier": 0.0425531914893617,
+      "ainooru_brier": 0.03048593617021277
+    }
+  ],
+  "calibration": {
+    "Ainooru, provisional noise": [
+      {
+        "bin": "0.0 to 0.1",
+        "n": 41,
+        "mean_forecast": 0.015439024390243902,
+        "observed_rate": 0.0
+      },
+      {
+        "bin": "0.1 to 0.3",
+        "n": 13,
+        "mean_forecast": 0.1999615384615384,
+        "observed_rate": 0.3076923076923077
+      },
+      {
+        "bin": "0.3 to 0.5",
+        "n": 23,
+        "mean_forecast": 0.4249239130434783,
+        "observed_rate": 0.43478260869565216
+      },
+      {
+        "bin": "0.5 to 0.7",
+        "n": 30,
+        "mean_forecast": 0.5961916666666667,
+        "observed_rate": 0.5333333333333333
+      },
+      {
+        "bin": "0.7 to 0.9",
+        "n": 36,
+        "mean_forecast": 0.8263958333333332,
+        "observed_rate": 0.8888888888888888
+      },
+      {
+        "bin": "0.9 to 1.0",
+        "n": 139,
+        "mean_forecast": 0.9885305755395685,
+        "observed_rate": 1.0
+      }
+    ],
+    "Ainooru, fitted noise": [
+      {
+        "bin": "0.0 to 0.1",
+        "n": 37,
+        "mean_forecast": 0.021439189189189193,
+        "observed_rate": 0.0
+      },
+      {
+        "bin": "0.1 to 0.3",
+        "n": 14,
+        "mean_forecast": 0.194625,
+        "observed_rate": 0.21428571428571427
+      },
+      {
+        "bin": "0.3 to 0.5",
+        "n": 33,
+        "mean_forecast": 0.4253863636363637,
+        "observed_rate": 0.36363636363636365
+      },
+      {
+        "bin": "0.5 to 0.7",
+        "n": 33,
+        "mean_forecast": 0.5999242424242425,
+        "observed_rate": 0.6666666666666666
+      },
+      {
+        "bin": "0.7 to 0.9",
+        "n": 47,
+        "mean_forecast": 0.8130744680851064,
+        "observed_rate": 0.9787234042553191
+      },
+      {
+        "bin": "0.9 to 1.0",
+        "n": 118,
+        "mean_forecast": 0.9852224576271186,
+        "observed_rate": 1.0
+      }
+    ]
+  }
+}

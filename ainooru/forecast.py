@@ -32,8 +32,10 @@ class Noise:
     source: str
 
 
-# Provisional values until the backtest in eval/ replaces them.
-DEFAULT_NOISE = Noise(sigma=0.30, phi=0.60, source="provisional default")
+# Chosen by grid search on the first year of a public household dataset and
+# scored on the following three years. See eval/RESULTS.md.
+DEFAULT_NOISE = Noise(sigma=0.20, phi=0.90, source="fitted on one year of a public household dataset (eval/RESULTS.md)")
+PROVISIONAL_NOISE = Noise(sigma=0.30, phi=0.60, source="provisional default")
 
 
 @dataclass(frozen=True)

@@ -52,6 +52,22 @@ The tests cover:
 * the forecaster: risk ordering, lateness, and a check that the daily budget really hits its 10% target;
 * the web flow, including the rejection of impossible readings.
 
+## Does the forecast hold up?
+
+I backtested the forecaster on a real home's daily use: the public UCI household power dataset, one home near Paris, December 2006 to November 2010. The home's usage was scaled so that its typical two-month cycle sits right at 500 units. I chose the noise settings on the first year only, then scored 282 forecasts (days 15, 30 and 45 of 94 cycles) on the next three years against the straight-line sum people do in their heads.
+
+| Method | Brier score (lower is better) | Right side of 500 at the 50% mark | Typical miss in units | 80% range held the true total |
+|---|---|---|---|---|
+| Straight line | 0.103 | 90% | 38 | no range given |
+| Ainooru | **0.070** | 90% | **32** | **84%** |
+
+Ainooru is no better at the simple yes-or-no call. What it adds is honest probabilities and ranges: a 32% lower Brier score overall, and the biggest gain early in the cycle, when the decision still matters (day 15: 0.181 against 0.114). It is somewhat cautious in the 70 to 90% band, where 98% of those cycles did cross. Full tables, calibration and limits are in [eval/RESULTS.md](eval/RESULTS.md). Reproduce them with:
+
+```sh
+uv run python eval/fetch_data.py
+uv run python eval/backtest.py
+```
+
 ## How it works
 
 * `ainooru/tariff.py` holds both tariff versions (before and after 10 May 2026) as telescopic slab tables, with exact decimal billing.
@@ -62,7 +78,7 @@ The tests cover:
 ## Limitations
 
 * Only energy charges are compared. Fixed charges depend on connected load and are the same either side of 500.
-* The day-to-day variation settings are provisional defaults until the backtest in `eval/` is complete.
+* The noise settings were fitted on one French household's data, not on Chennai homes. The backtest covers one home only.
 * The tariff figures come from published reporting of G.O. (Ms) No. 50 and TNERC Order No. 5 of 2026; see `DESIGN.md` for sources. Check them against your own bill.
 * The AC conversion assumes a typical 1.2 units an hour for a 1.5 ton inverter split AC.
 
