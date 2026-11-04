@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block content %}
+<h1>One extra unit can cost ₹{{ "%.2f"|format(tariff.cliff()) }}.</h1>
+<p class="lead">Tamil Nadu bills homes every two months. At 500 units or fewer, the first 200 units are free. At 501, only 100 are free and a costlier table applies. Ainooru watches your meter and tells you, before the reader comes, whether you will cross the line and what to do about it.</p>
+
+<div class="grid two">
+  <section class="card" aria-labelledby="start-h">
+    <h2 id="start-h">Start with your last bill <span class="ta" lang="ta">கடைசி பில்</span></h2>
+    <form method="post" action="/cycle">
+      <div class="grid">
+        <div class="field"><label for="start_day">Date of the last meter reading</label>
+          <input type="date" id="start_day" name="start_day" required max="{{ today }}"></div>
+        <div class="field"><label for="start_reading">Meter reading on that bill (kWh)</label>
+          <input type="number" id="start_reading" name="start_reading" required min="0" step="1" inputmode="numeric" placeholder="for example 18240"></div>
+        <div class="field"><label for="expected_end">Next reading expected on (optional, default 60 days later)</label>
+          <input type="date" id="expected_end" name="expected_end"></div>
+        <div class="field"><label for="late_max">The reader may come up to this many days late</label>
+          <input type="number" id="late_max" name="late_max" value="3" min="0" max="15"></div>
+        <div><button type="submit">Start tracking</button></div>
+      </div>
+    </form>
+  </section>
+  <section class="card" aria-labelledby="cliff-h">
+    <h2 id="cliff-h">The cliff, in rupees</h2>
+    <div class="cliff">
+      <div>500 units<b>₹{{ "{:,.2f}".format(tariff.energy_charge(500)) }}</b></div>
+      <div class="bad">501 units<b>₹{{ "{:,.2f}".format(tariff.energy_charge(501)) }}</b></div>
+    </div>
+    <p class="fine">Energy charges for one two-month cycle. Before 10 May 2026 the same single unit cost ₹{{ "%.2f"|format(old_tariff.cliff()) }} extra; the new 200 free units almost doubled the cliff.</p>
+    <form method="post" action="/sample"><button class="ghost" type="submit">Try it with sample readings</button></form>
+  </section>
+</div>
+{% endblock %}

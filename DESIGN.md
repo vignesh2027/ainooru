@@ -22,7 +22,7 @@ That one extra unit costs **Rs 478.40**. Before May 2026 the same step cost Rs 2
 Ainooru takes a few meter readings, which anyone can read off the LCD in ten seconds. It runs a probabilistic forecast of where the cycle will end, allowing for the uncertain reading date, and reports three things:
 
 * the chance of crossing 500;
-* the **cliff-aware price of a unit saved today**, which near the cliff can be many times the printed slab rate;
+* the **cliff-aware price of a unit saved today**. Near the cliff it is about Rs 10 at mid-cycle and above Rs 40 in the last two days, against printed rates of Rs 4.70 and Rs 6.30. These figures were measured with the forecaster; an earlier draft guessed it would be "many times" the slab rate, which overstated the mid-cycle case;
 * a daily unit budget that keeps the risk under a chosen level, translated into appliance hours.
 
 It also says when the cliff is already lost, so the family stops sacrificing comfort for nothing.
@@ -98,6 +98,10 @@ The working name was "Minnal" (lightning). I dropped it because it is heavily us
 | Domains | vilimbu.com registered (no site responds) | ainooru.com, ainooru.in and ainooru.app do not resolve |
 
 **Decision: Ainooru.** No product, app, company or brand uses it. The word is the generic numeral, which is fine for a project name and tells the user exactly what the tool protects. Vilimbu was close, but it is the title of a well-known novel and its .com is taken. I did not run a formal search of the Indian trademark register; that is listed as a limitation.
+
+## Logo
+
+The mark is original and built from the idea itself. A white usage line climbs to a dotted limit line, and at the deep violet point where it meets the limit the line jumps straight up: the bill's cliff. It sits on a primary-blue rounded tile. It uses only theme colours (#2563EB, #4C1D95, white, and a light tint of the primary) and contains no letterform or borrowed symbol. Files: `assets/logo.svg` (also served as `ainooru/static/logo.svg`) and `assets/logo-512.png` (512 by 512, transparent corners, rendered from the SVG in headless Chrome).
 
 ## Facts Ainooru depends on (with sources)
 

@@ -1,0 +1,27 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Ainooru: stay under 500 units</title>
+<meta name="description" content="Forecast your Tamil Nadu electricity cycle and stay under the 500-unit cliff.">
+<link rel="icon" href="/static/logo.svg" type="image/svg+xml">
+<link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="top"><div class="wrap">
+  <img src="/static/logo.svg" alt="">
+  <div class="brand">Ainooru <small>Stay under 500 units · <span lang="ta">ஐநூறுக்குள் இருங்கள்</span></small></div>
+  <div class="spacer"></div>
+  <span class="pill">Tamil Nadu domestic tariff, from 10 May 2026</span>
+</div></header>
+<main><div class="wrap">
+{% if error %}<div class="error" role="alert">{{ error }}</div>{% endif %}
+{% block content %}{% endblock %}
+</div></main>
+<footer><div class="wrap">
+  Energy charges only. Fixed charges depend on your connected load and are the same on both sides of 500, so they are left out.
+  Tariff: {{ tariff.source }} Ainooru runs on your own computer and stores readings only in a local file.
+</div></footer>
+</body>
+</html>
