@@ -4,7 +4,7 @@ from __future__ import annotations
 
 from datetime import date, timedelta
 from pathlib import Path
-from urllib.parse import quote
+from urllib.parse import urlencode
 
 from fastapi import FastAPI, Form, Request
 from fastapi.responses import HTMLResponse, RedirectResponse
@@ -14,6 +14,7 @@ from fastapi.templating import Jinja2Templates
 from . import store
 from .charts import cycle_chart
 from .forecast import Reading, default_end, simulate
+from .i18n import LANGS, S, fmt_day, translator
 from .tariff import CURRENT, TN_2024
 
 HERE = Path(__file__).resolve().parent
@@ -21,9 +22,9 @@ app = FastAPI(title="Ainooru")
 app.mount("/static", StaticFiles(directory=HERE / "static"), name="static")
 templates = Jinja2Templates(directory=HERE / "templates")
 
-# Typical draw of a 1.5 ton inverter split AC in a Chennai bedroom. Shown with a
-# "check your label" note; it only converts units into something people can act on.
-AC_KWH_PER_HOUR = 1.2
+# Typical draw in units (kWh) per hour. Only used to turn a daily cut into
+# something a family can act on; the page tells them to check their own label.
+APPLIANCES = (("ac15", 1.2), ("ac1", 0.9), ("geyser", 2.0), ("motor", 0.75), ("iron", 1.0), ("fan", 0.075))
 
 
 def rupees(v: float, decimals: int = 0) -> str:
@@ -37,56 +38,84 @@ def today() -> date:
     return date.today()
 
 
-def back(error: str | None = None) -> RedirectResponse:
-    url = "/" if not error else f"/?error={quote(error)}"
-    return RedirectResponse(url, status_code=303)
+def lang_of(request: Request) -> str:
+    lang = request.cookies.get("lang", "en")
+    return lang if lang in LANGS else "en"
 
 
-def advice(f) -> str:
+def back(error: str | None = None, **params) -> RedirectResponse:
+    if not error:
+        return RedirectResponse("/", status_code=303)
+    return RedirectResponse("/?" + urlencode({"error": error, **params}), status_code=303)
+
+
+def advice(f, t) -> str:
     if f.status == "over":
-        return (
-            f"This cycle has already passed {f.threshold} units, so it is billed on the higher table. "
-            "From here each unit costs the normal slab rate of ₹8.40 to ₹11.55."
-        )
+        return t("advice_over", T=f.threshold)
     if f.status == "lost":
-        return (
-            f"Even halving use from today would very likely end above {f.threshold}. The cliff is lost for this cycle, "
-            f"so cutting back now saves only about {rupees(f.unit_value, 2)} a unit. Do not give up comfort for it."
-        )
+        return t("advice_lost", T=f.threshold, v=rupees(f.unit_value, 2))
     if f.status == "safe":
-        return f"On track to stay at or under {f.threshold} units. Keep going as you are."
-    cut = f.cut_per_day or 0
-    hours = cut / AC_KWH_PER_HOUR
-    return (
-        f"Keep to {f.safe_rate:.1f} units a day (now {f.rate:.1f}). That is {cut:.1f} units a day less, "
-        f"about {hours:.1f} hours less of a 1.5 ton AC."
-    )
+        return t("advice_safe", T=f.threshold)
+    return t("advice_cut", safe=f"{f.safe_rate:.1f}", rate=f"{f.rate:.1f}", cut=f"{f.cut_per_day:.1f}")
+
+
+def appliance_chips(cut: float, t) -> list[str]:
+    chips = []
+    for key, kwh in APPLIANCES:
+        hours = cut / kwh
+        if hours <= 24:
+            chips.append(t("chip", h=f"{hours:.1f}", name=t(key)))
+    return chips
+
+
+def error_text(request: Request, t) -> str | None:
+    key = request.query_params.get("error")
+    if not key or key not in S or not key.startswith("err_"):
+        return None
+    params = {k: v for k, v in request.query_params.items() if k != "error"}
+    try:
+        return t(key, **params)
+    except KeyError:
+        return None
 
 
 @app.get("/", response_class=HTMLResponse)
-def home(request: Request, error: str | None = None):
+def home(request: Request):
+    lang = lang_of(request)
+    t = translator(lang)
     cycle = store.get_cycle()
-    ctx = {"error": error, "today": today(), "tariff": CURRENT, "old_tariff": TN_2024}
+    ctx = {"error": error_text(request, t), "today": today(), "tariff": CURRENT, "old_tariff": TN_2024,
+           "t": t, "lang": lang, "day": lambda d, year=False: fmt_day(d, lang, year)}
     if cycle is None:
         return templates.TemplateResponse(request, "setup.html", ctx)
     stored = store.readings()
     start = Reading(cycle.start_day, cycle.start_reading)
     rs = [Reading(r.day, r.value) for r in stored]
+    ctx.update(cycle=cycle, readings=stored, forecast=None)
     try:
         f = simulate(tariff=CURRENT, start=start, readings=rs, expected_end=cycle.expected_end, late_max=cycle.late_max)
-    except ValueError as e:
-        ctx.update(cycle=cycle, readings=stored, forecast=None, error=str(e))
+    except ValueError:
+        ctx["error"] = t("err_order")
         return templates.TemplateResponse(request, "dashboard.html", ctx)
+    cut = f.cut_per_day or 0
     ctx.update(
-        cycle=cycle,
-        readings=stored,
         forecast=f,
-        advice=advice(f),
-        chart=cycle_chart(start, rs, cycle.expected_end, cycle.late_max, f),
-        ac_rate=AC_KWH_PER_HOUR,
-        hours_cut=(f.cut_per_day or 0) / AC_KWH_PER_HOUR,
+        advice=advice(f, t),
+        chart_wide=cycle_chart(start, rs, cycle.expected_end, cycle.late_max, f, lang),
+        chart_compact=cycle_chart(start, rs, cycle.expected_end, cycle.late_max, f, lang, compact=True),
+        chips=appliance_chips(cut, t),
+        cut=cut,
+        appliance_list=", ".join(f"{t(k)} {v:g}" for k, v in APPLIANCES),
     )
     return templates.TemplateResponse(request, "dashboard.html", ctx)
+
+
+@app.get("/lang/{code}")
+def set_lang(code: str):
+    r = RedirectResponse("/", status_code=303)
+    if code in LANGS:
+        r.set_cookie("lang", code, max_age=365 * 24 * 3600, samesite="lax")
+    return r
 
 
 @app.post("/cycle")
@@ -97,12 +126,12 @@ def set_cycle(
     late_max: int = Form(3),
 ):
     if start_day > today():
-        return back("The last bill's reading date cannot be in the future.")
+        return back("err_future")
     if start_reading < 0:
-        return back("A meter reading cannot be negative.")
+        return back("err_negative")
     end = expected_end or default_end(start_day)
     if end <= start_day:
-        return back("The next reading date must be after the last one.")
+        return back("err_end")
     store.set_cycle(store.Cycle(start_day, start_reading, end, max(0, min(late_max, 15)), sample=False))
     return back()
 
@@ -111,13 +140,13 @@ def set_cycle(
 def add_reading(day: date = Form(...), value: float = Form(...)):
     cycle = store.get_cycle()
     if cycle is None:
-        return back("Set up the cycle first.")
+        return back("err_setup")
     if day < cycle.start_day or day > today():
-        return back("The reading date must be between the last bill and today.")
-    earlier = [r for r in store.readings() if r.day <= day] or []
-    floor = max([cycle.start_reading] + [r.value for r in earlier])
+        return back("err_range")
+    earlier = [r.value for r in store.readings() if r.day <= day]
+    floor = max([cycle.start_reading] + earlier)
     if value < floor:
-        return back(f"{value:g} is lower than an earlier reading of {floor:g}. Check the number on the meter.")
+        return back("err_lower", v=f"{value:g}", floor=f"{floor:g}")
     store.add_reading(day, value)
     return back()
 

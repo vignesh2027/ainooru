@@ -1,75 +1,77 @@
 {% extends "base.html" %}
 {% block content %}
-{% if cycle.sample %}<div class="sample">You are looking at made-up sample readings. <form method="post" action="/reset" style="display:inline"><button class="link" type="submit" style="color:inherit;text-decoration:underline">Start with your own bill</button></form></div>{% endif %}
-{% if forecast %}{% set f = forecast %}
+{% if cycle.sample %}<div class="sample">{{ t("sample_banner") }} <form method="post" action="/reset" class="inline-form"><button class="link plain" type="submit">{{ t("sample_own") }}</button></form></div>{% endif %}
+{% if forecast %}{% set f = forecast %}{% set pc = (f.p_cross * 100)|round(0)|int %}
 <section class="card hero {{ f.status }}" aria-live="polite">
-  <div class="gauge" style="--p: {{ (f.p_cross * 100)|round(0) }}"><span>{{ (f.p_cross * 100)|round(0)|int }}%</span></div>
+  <div class="gauge" style="--p: {{ pc }}"><span>{{ pc }}%</span></div>
   <div>
-    <h1>{% if f.status == "over" %}Already past {{ f.threshold }} units this cycle
-      {% else %}{{ (f.p_cross * 100)|round(0)|int }}% chance of crossing {{ f.threshold }} units{% endif %}</h1>
+    <h1>{% if f.status == "over" %}{{ t("hero_over", T=f.threshold) }}{% else %}{{ t("hero_p", p=pc, T=f.threshold) }}{% endif %}</h1>
     <p>{{ advice }}</p>
   </div>
 </section>
 
 <div class="grid three">
   <section class="card stat">
-    <div class="label">Used so far</div>
-    <div class="value">{{ f.used }} units</div>
-    <div class="sub">in {{ f.days_elapsed }} days, about {{ "%.1f"|format(f.rate) }} a day. Reading due in {{ f.days_left_nominal }} days.</div>
+    <div class="label">{{ t("used_label") }}</div>
+    <div class="value">{{ t("units_n", n=f.used) }}</div>
+    <div class="sub">{{ t("used_sub", d=f.days_elapsed, r="%.1f"|format(f.rate), left=f.days_left_nominal) }}</div>
   </section>
   <section class="card stat">
-    <div class="label">Likely bill (energy)</div>
+    <div class="label">{{ t("bill_label") }}</div>
     <div class="value">{{ f.bill_p50|rupees }}</div>
-    <div class="sub">8 in 10 chance between {{ f.bill_p10|rupees }} and {{ f.bill_p90|rupees }}. Likely {{ f.units_p50 }} units.</div>
+    <div class="sub">{{ t("bill_sub", lo=f.bill_p10|rupees, hi=f.bill_p90|rupees, u=f.units_p50) }}</div>
   </section>
   <section class="card stat accent">
-    <div class="label">A unit saved today is worth</div>
+    <div class="label">{{ t("unit_label") }}</div>
     <div class="value">{{ f.unit_value|rupees(2) }}</div>
-    <div class="sub">on average, cliff included. The printed rate near 500 is ₹4.70 to ₹6.30.</div>
+    <div class="sub">{{ t("unit_sub") }}</div>
   </section>
 </div>
 
 {% if f.safe_rate is not none and f.status in ("watch", "danger") %}
 <section class="card">
-  <h2>Your daily budget</h2>
-  <p style="margin:0">Keep to <b>{{ "%.1f"|format(f.safe_rate) }} units a day</b> until the reading and the chance of crossing drops to {{ (f.target * 100)|int }}%.
-  That means using about {{ "%.0f"|format(f.units_cut_if_safe) }} fewer units this cycle, and it saves about <b>{{ f.saving_if_safe|rupees }}</b> on average,
-  or {{ (f.saving_if_safe / f.units_cut_if_safe)|rupees(2) }} for every unit you give up.</p>
-  <p class="fine">About {{ "%.1f"|format(hours_cut) }} hours less of a 1.5 ton AC a day, taking a typical {{ ac_rate }} units an hour. Check the label on your own appliance.</p>
+  <h2>{{ t("budget_h") }}</h2>
+  <p class="m0">{{ t("budget_body", safe="%.1f"|format(f.safe_rate), target=(f.target * 100)|int, units="%.0f"|format(f.units_cut_if_safe),
+      saving=f.saving_if_safe|rupees, per=(f.saving_if_safe / f.units_cut_if_safe)|rupees(2)) }}</p>
+  {% if chips %}
+  <p class="chips-h">{{ t("cut_as", cut="%.1f"|format(cut)) }}</p>
+  <ul class="chips">{% for c in chips %}<li>{{ c }}</li>{% endfor %}</ul>
+  {% endif %}
+  <p class="fine">{{ t("appliance_note", list=appliance_list) }}</p>
 </section>
 {% endif %}
 
 <section class="card">
-  <h2>This cycle</h2>
-  {{ chart|safe }}
+  <h2>{{ t("chart_h") }}</h2>
+  {{ chart_wide|safe }}{{ chart_compact|safe }}
   <div class="legend">
-    <span><i style="background:var(--text)"></i>Your readings</span>
-    <span><i style="background:var(--primary);opacity:.35"></i>Where it is heading (8 in 10 range)</span>
-    <span><i style="background:var(--accent);opacity:.3"></i>Reader may come</span>
-    <span><i style="background:var(--danger)"></i>{{ f.threshold }}-unit line</span>
+    <span><i style="background:var(--text)"></i>{{ t("legend_readings") }}</span>
+    <span><i style="background:var(--primary);opacity:.35"></i>{{ t("legend_band") }}</span>
+    <span><i style="background:var(--accent);opacity:.3"></i>{{ t("legend_window") }}</span>
+    <span><i style="background:var(--danger)"></i>{{ t("legend_line", T=f.threshold) }}</span>
   </div>
 </section>
 {% endif %}
 
 <div class="grid two">
   <section class="card" aria-labelledby="add-h">
-    <h2 id="add-h">Add today's meter reading <span class="ta" lang="ta">மீட்டர் அளவீடு</span></h2>
+    <h2 id="add-h">{{ t("add_h") }}</h2>
     <form method="post" action="/readings" class="inline">
-      <div class="field"><label for="day">Date</label><input type="date" id="day" name="day" value="{{ today }}" max="{{ today }}" min="{{ cycle.start_day }}" required></div>
-      <div class="field"><label for="value">Reading (kWh)</label><input type="number" id="value" name="value" min="0" step="1" inputmode="numeric" required></div>
-      <div><button type="submit">Add</button></div>
+      <div class="field"><label for="day">{{ t("f_date") }}</label><input type="date" id="day" name="day" value="{{ today }}" max="{{ today }}" min="{{ cycle.start_day }}" required></div>
+      <div class="field"><label for="value">{{ t("f_reading") }}</label><input type="number" id="value" name="value" min="0" step="1" inputmode="numeric" required></div>
+      <div><button type="submit">{{ t("btn_add") }}</button></div>
     </form>
-    <p class="fine">Read the kWh number on the meter display. One reading a week is enough; more readings make the forecast tighter.</p>
+    <p class="fine">{{ t("add_note") }}</p>
   </section>
   <section class="card">
-    <h2>Readings</h2>
+    <h2>{{ t("readings_h") }}</h2>
     <table>
-      <thead><tr><th>Date</th><th>Reading</th><th>Units since bill</th><th></th></tr></thead>
+      <thead><tr><th>{{ t("th_date") }}</th><th>{{ t("th_reading") }}</th><th>{{ t("th_since") }}</th><th></th></tr></thead>
       <tbody>
-        <tr><td>{{ cycle.start_day.strftime("%d %b") }}</td><td>{{ "%.0f"|format(cycle.start_reading) }}</td><td>last bill</td><td></td></tr>
+        <tr><td>{{ day(cycle.start_day) }}</td><td>{{ "%.0f"|format(cycle.start_reading) }}</td><td>{{ t("last_bill") }}</td><td></td></tr>
         {% for r in readings %}
-        <tr><td>{{ r.day.strftime("%d %b") }}</td><td>{{ "%.0f"|format(r.value) }}</td><td>{{ "%.0f"|format(r.value - cycle.start_reading) }}</td>
-          <td><form method="post" action="/readings/{{ r.id }}/delete"><button class="link" type="submit" aria-label="Delete reading of {{ r.day }}">Delete</button></form></td></tr>
+        <tr><td>{{ day(r.day) }}</td><td>{{ "%.0f"|format(r.value) }}</td><td>{{ "%.0f"|format(r.value - cycle.start_reading) }}</td>
+          <td><form method="post" action="/readings/{{ r.id }}/delete"><button class="link" type="submit" aria-label="{{ t('delete') }} {{ day(r.day) }}">{{ t("delete") }}</button></form></td></tr>
         {% endfor %}
       </tbody>
     </table>
@@ -77,9 +79,9 @@
 </div>
 
 <details class="card">
-  <summary>How this is worked out</summary>
-  <p>Ainooru estimates your recent daily use, weighting the last two weeks most, then simulates the rest of the cycle 4,000 times. Each run varies how much you use from day to day, how wrong the estimate might be, and how many days late the reader comes (up to {{ cycle.late_max }}). Every run ends in a whole number of units and an exact bill from the tariff table.</p>
-  {% if forecast %}<p class="fine">Day-to-day variation: {{ forecast.noise.source }} (spread {{ forecast.noise.sigma }}, persistence {{ forecast.noise.phi }}). Cycle {{ cycle.start_day.strftime("%d %b %Y") }} to about {{ cycle.expected_end.strftime("%d %b %Y") }}.</p>{% endif %}
-  <form method="post" action="/reset"><button class="ghost" type="submit">Start a new cycle</button></form>
+  <summary>{{ t("how_h") }}</summary>
+  <p>{{ t("how_body", late=cycle.late_max) }}</p>
+  {% if forecast %}<p class="fine">{{ t("how_noise", s=forecast.noise.sigma, p=forecast.noise.phi, a=day(cycle.start_day, True), b=day(cycle.expected_end, True)) }}</p>{% endif %}
+  <form method="post" action="/reset"><button class="ghost" type="submit">{{ t("btn_new") }}</button></form>
 </details>
 {% endblock %}

@@ -104,3 +104,19 @@ th { color: var(--muted); font-weight: 600; font-size: .8rem; }
 details summary { cursor: pointer; font-weight: 650; color: var(--primary); }
 footer { color: var(--muted); font-size: .85rem; padding: 24px 0; border-top: 1px solid var(--line); }
 .ta { font-size: .92em; color: var(--muted); }
+.switch { font-weight: 650; text-decoration: none; padding: 6px 12px; border: 1px solid var(--line); border-radius: 999px; white-space: nowrap; }
+.switch:hover { background: var(--primary-soft); }
+.chart-compact { display: none; }
+@media (max-width: 600px) {
+  .chart-wide { display: none; }
+  .chart-compact { display: block; }
+  .hide-narrow { display: none; }
+  h1 { font-size: 1.4rem; }
+}
+.m0 { margin: 0; }
+.chips-h { margin: 14px 0 6px; font-weight: 600; color: var(--muted); font-size: .9rem; }
+.chips { list-style: none; padding: 0; margin: 0 0 4px; display: flex; flex-wrap: wrap; gap: 8px; }
+.chips li { background: var(--primary-soft); color: var(--text); border-radius: 999px; padding: 6px 12px; font-size: .9rem; font-weight: 600; }
+.inline-form { display: inline; }
+button.plain { color: inherit; text-decoration: underline; }
+:lang(ta) h1 { line-height: 1.35; }

@@ -55,3 +55,40 @@ def test_delete_and_reset(client):
     assert r.status_code == 200
     r = client.post("/reset", follow_redirects=True)
     assert "Start with your last bill" in r.text
+
+
+def test_every_string_has_both_languages():
+    from ainooru.i18n import LANGS, S
+
+    for key, texts in S.items():
+        for lang in LANGS:
+            assert texts.get(lang), f"{key} missing {lang}"
+
+
+def test_tamil_switch(client):
+    client.post("/sample")
+    r = client.get("/lang/ta", follow_redirects=True)
+    assert 'lang="ta"' in r.text
+    assert "யூனிட்டைத் தாண்ட" in r.text
+    assert "நாளொன்றுக்கு" in r.text
+    r = client.get("/lang/en", follow_redirects=True)
+    assert "chance of crossing" in r.text
+
+
+def test_error_message_in_tamil(client):
+    client.get("/lang/ta")
+    start = date.today() - timedelta(days=10)
+    client.post("/cycle", data={"start_day": start.isoformat(), "start_reading": "1000"})
+    r = client.post("/readings", data={"day": date.today().isoformat(), "value": "900"}, follow_redirects=True)
+    assert "முந்தைய அளவீடான 1000" in r.text
+
+
+def test_unknown_error_key_is_ignored(client):
+    r = client.get("/?error=title")
+    assert 'role="alert"' not in r.text
+
+
+def test_appliance_chips_and_compact_chart(client):
+    r = client.post("/sample", follow_redirects=True)
+    assert "1.5 ton AC" in r.text and "1 HP water pump" in r.text
+    assert "chart-compact" in r.text and "chart-wide" in r.text
