@@ -101,7 +101,7 @@ The working name was "Minnal" (lightning). I dropped it because it is heavily us
 
 ## Logo
 
-The mark is original and built from the idea itself. A white usage line climbs to a dotted limit line, and at the deep violet point where it meets the limit the line jumps straight up: the bill's cliff. It sits on a primary-blue rounded tile. It uses only theme colours (#2563EB, #4C1D95, white, and a light tint of the primary) and contains no letterform or borrowed symbol. Files: `assets/logo.svg` (also served as `ainooru/static/logo.svg`) and `assets/logo-512.png` (512 by 512, transparent corners, rendered from the SVG in headless Chrome).
+The mark is original and built from the idea itself, drawn as solid shapes so it survives small sizes. A white ramp of usage climbs to a dotted 500 line, and just past it a coral column rises: the bill's cliff. The narrow gap between ramp and column is the single unit that costs ₹478. Both sit on a cobalt rounded tile. The colours are cobalt (#1747D1), cliff coral (#FF6B4A), white and a light limit tint (#A9C1FF), with no violet; coral gives the product one alarm colour that is not the UI's danger red, and the mark avoids the TANGEDCO and TNEB palettes and contains no letterform or borrowed symbol. Files: `assets/logo.svg` (also served as `ainooru/static/logo.svg`), `assets/logo-512.png` (512 by 512, transparent corners), and `ainooru/static/favicon.svg`, a simpler drawing without the dotted line used as the browser tab icon.
 
 ## Facts Ainooru depends on (with sources)
 
