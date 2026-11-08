@@ -24,3 +24,7 @@ The sample figures below are what the sample household shows on any day, because
 | 1:55 | Show README section "Does the forecast hold up?" | "And it is tested: on three years of a real household's data its Brier score was 32% lower than straight-line guessing, which means more honest probabilities. Ainooru: stay under 500." |
 
 Fallback if the photo step fails during recording: type the reading and say "or just type it".
+
+## As recorded (8 Nov 2026)
+
+The video follows this script on the hosted demo, with two changes. The photo step uses a meter display rendered for the demo, shown first on a card that says it is not a real photo. And after the photo step it adds "start from your own bill" (example values: last bill 24310 on 18 Oct, today 24490), which shows 180 units in 21 days and a 57% chance. The README step became a backtest card with the same figures. Full notes: /Users/vignesh/dev-challenges/nov/video/ainooru-demo-notes.md.
