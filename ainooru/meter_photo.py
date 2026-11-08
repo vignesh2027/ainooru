@@ -13,6 +13,7 @@ import io
 import json
 import os
 import re
+import time
 from pathlib import Path
 
 import httpx
@@ -21,6 +22,8 @@ from PIL import Image, ImageOps
 ENDPOINT = "https://api.groq.com/openai/v1/chat/completions"
 MODEL = os.environ.get("AINOORU_VISION_MODEL", "qwen/qwen3.8-27b")
 MAX_SIDE = 1280
+RETRIES = 3
+BACKOFF = 1.0  # seconds, doubled each retry
 PROMPT = (
     "This is a photo of a household electricity meter in Tamil Nadu. Find the cumulative energy reading in kWh "
     "on its display. Ignore serial numbers, ratings such as 5-30A or 240V, and the imp/kWh constant. "
@@ -89,11 +92,17 @@ def read_meter(image_bytes: bytes, client: httpx.Client | None = None) -> int | 
         ]}],
     }
     own = client is None
-    client = client or httpx.Client(timeout=30)
+    client = client or httpx.Client(timeout=20)
     try:
-        r = client.post(ENDPOINT, json=body, headers={"Authorization": f"Bearer {key}"})
-        r.raise_for_status()
-        return parse(r.json()["choices"][0]["message"]["content"])
+        # Groq's free tier sometimes answers 503 "over capacity" or 429; back off briefly and try again.
+        for attempt in range(RETRIES + 1):
+            r = client.post(ENDPOINT, json=body, headers={"Authorization": f"Bearer {key}"})
+            if r.status_code in (429, 500, 502, 503) and attempt < RETRIES:
+                time.sleep(BACKOFF * 2 ** attempt)
+                continue
+            r.raise_for_status()
+            return parse(r.json()["choices"][0]["message"]["content"])
+        return None
     except Exception:
         return None
     finally:

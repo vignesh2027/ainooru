@@ -85,3 +85,25 @@ def test_photo_form_hidden_without_key(tmp_path, monkeypatch):
     r = c.post("/sample", follow_redirects=True)
     assert 'action="/photo"' not in r.text
     assert 'action="/readings"' in r.text
+
+
+def test_read_meter_retries_when_the_model_is_over_capacity(monkeypatch):
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    monkeypatch.setattr(meter_photo, "BACKOFF", 0)
+    calls = []
+
+    def handler(request):
+        calls.append(1)
+        if len(calls) < 3:
+            return httpx.Response(503, json={"error": {"message": "over capacity"}})
+        return httpx.Response(200, json={"choices": [{"message": {"content": '{"kwh": "018534"}'}}]})
+
+    assert meter_photo.read_meter(png_bytes(), httpx.Client(transport=httpx.MockTransport(handler))) == 18534
+    assert len(calls) == 3
+
+
+def test_read_meter_gives_up_after_retries(monkeypatch):
+    monkeypatch.setenv("GROQ_API_KEY", "test-key")
+    monkeypatch.setattr(meter_photo, "BACKOFF", 0)
+    client = httpx.Client(transport=httpx.MockTransport(lambda r: httpx.Response(503, json={})))
+    assert meter_photo.read_meter(png_bytes(), client) is None
