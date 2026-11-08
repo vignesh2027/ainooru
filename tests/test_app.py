@@ -92,3 +92,22 @@ def test_appliance_chips_and_compact_chart(client):
     r = client.post("/sample", follow_redirects=True)
     assert "1.5 ton AC" in r.text and "1 HP water pump" in r.text
     assert "chart-compact" in r.text and "chart-wide" in r.text
+
+
+def test_hosted_households_are_per_browser_and_in_memory(tmp_path, monkeypatch):
+    monkeypatch.setenv("AINOORU_DB", str(tmp_path / "t.sqlite3"))
+    from ainooru import app as app_module, store
+    from ainooru.app import app
+
+    monkeypatch.setattr(store, "HOSTED", True)
+    monkeypatch.setitem(app_module.templates.env.globals, "hosted", True)
+    a = TestClient(app, base_url="https://testserver")
+    b = TestClient(app, base_url="https://testserver")
+    assert "public demo" in a.get("/").text
+    r = a.post("/sample", follow_redirects=True)
+    assert "chance of crossing 500 units" in r.text
+    assert "chance of crossing 500 units" not in b.get("/").text
+    assert "chance of crossing 500 units" in a.get("/").text
+    assert not (tmp_path / "t.sqlite3").exists()
+    a.post("/reset")
+    assert "chance of crossing 500 units" not in a.get("/").text

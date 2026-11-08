@@ -21,7 +21,7 @@
 {% block content %}{% endblock %}
 </div></main>
 <footer><div class="wrap">
-  {{ t("footer") }} {{ t("tariff_source") }} {{ tariff.source }}
+  {{ t("footer_hosted" if hosted else "footer") }} {{ t("tariff_source") }} {{ tariff.source }}
 </div></footer>
 </body>
 </html>

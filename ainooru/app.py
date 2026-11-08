@@ -2,6 +2,8 @@
 
 from __future__ import annotations
 
+import re
+import secrets
 from datetime import date, timedelta
 from pathlib import Path
 from urllib.parse import urlencode
@@ -32,6 +34,27 @@ def rupees(v: float, decimals: int = 0) -> str:
 
 
 templates.env.filters["rupees"] = rupees
+templates.env.globals["hosted"] = store.HOSTED
+COOKIE = "ainooru_id"
+
+
+@app.middleware("http")
+async def household(request: Request, call_next):
+    """Hosted demo: tie each browser to its own in-memory household with a random cookie id."""
+    if not store.HOSTED:
+        return await call_next(request)
+    owner = request.cookies.get(COOKIE, "")
+    fresh = not re.fullmatch(r"[A-Za-z0-9_-]{16,64}", owner)
+    if fresh:
+        owner = secrets.token_urlsafe(18)
+    token = store.OWNER.set(owner)
+    try:
+        response = await call_next(request)
+    finally:
+        store.OWNER.reset(token)
+    if fresh:
+        response.set_cookie(COOKIE, owner, httponly=True, samesite="lax", secure=True, max_age=7 * 24 * 3600)
+    return response
 # Cache-busting stamp so browsers pick up a changed stylesheet.
 templates.env.globals["css_v"] = int((HERE / "static" / "style.css").stat().st_mtime)
 

@@ -4,7 +4,9 @@ from __future__ import annotations
 
 import os
 import sqlite3
+from collections import OrderedDict
 from contextlib import contextmanager
+from contextvars import ContextVar
 from dataclasses import dataclass
 from datetime import date
 from pathlib import Path
@@ -42,15 +44,41 @@ class StoredReading:
     value: float
 
 
+# Hosted demo mode: every browser gets its own SQLite database held in memory (a shared-cache
+# memory URI keyed by a random cookie id). Nothing is written to disk, the oldest households are
+# dropped past MAX_HOUSEHOLDS, and everything is lost when the demo restarts.
+HOSTED = os.environ.get("AINOORU_HOSTED") == "1"
+OWNER: ContextVar[str] = ContextVar("owner", default="anon")
+MAX_HOUSEHOLDS = 500
+_keep: "OrderedDict[str, sqlite3.Connection]" = OrderedDict()
+
+
+def _memory_uri(owner: str) -> str:
+    return f"file:ainooru-{owner}?mode=memory&cache=shared"
+
+
+def _open() -> sqlite3.Connection:
+    if not HOSTED:
+        path = db_path()
+        path.parent.mkdir(parents=True, exist_ok=True)
+        return sqlite3.connect(path)
+    owner = OWNER.get()
+    if owner in _keep:
+        _keep.move_to_end(owner)
+    else:  # one open connection keeps the memory database alive
+        _keep[owner] = sqlite3.connect(_memory_uri(owner), uri=True, check_same_thread=False)
+        while len(_keep) > MAX_HOUSEHOLDS:
+            _keep.popitem(last=False)[1].close()
+    return sqlite3.connect(_memory_uri(owner), uri=True)
+
+
 def db_path() -> Path:
     return Path(os.environ.get("AINOORU_DB", Path(__file__).resolve().parent.parent / "data" / "ainooru.sqlite3"))
 
 
 @contextmanager
 def connect():
-    path = db_path()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    con = sqlite3.connect(path)
+    con = _open()
     try:
         con.executescript(SCHEMA)
         yield con

@@ -4,6 +4,10 @@
 
 **Stay under 500 units.** Ainooru (ஐநூறு, Tamil for "five hundred") forecasts a Tamil Nadu household's two-month electricity cycle from a few meter readings. It tells the family, before the meter reader comes, whether they will cross the 500-unit line and what crossing it would cost.
 
+**Live demo:** https://applemacbook6sep2004--ainooru.us-east.modal.run
+
+The demo runs on one small Modal container that sleeps when idle, so the first visit can take a few seconds. Each browser gets its own household, kept in server memory only and wiped when the demo restarts; nothing is written to disk. The meter-photo option is switched on: a photo is shrunk, sent to the open vision model on Groq, and not kept.
+
 ## The problem
 
 Since 10 May 2026, a Tamil Nadu home that uses 500 units or fewer in a two-month cycle gets 200 units free. At 501 units only 100 are free, and the whole bill moves to a costlier table.
@@ -89,6 +93,10 @@ uv run python eval/backtest.py
 * `ainooru/forecast.py` estimates the recent daily rate, weighted towards the last two weeks. It then simulates the rest of the cycle 4,000 times, with day-to-day variation that persists across days, uncertainty in the rate estimate, and a random reader delay. Every path ends in whole units and an exact bill.
 * `ainooru/charts.py` draws the cycle chart as plain SVG on the server.
 * The pages are Jinja templates served by FastAPI, with no JavaScript framework.
+
+## Hosted demo
+
+`modal_app.py` deploys the demo with `modal deploy modal_app.py`: a quarter CPU, 512 MB, scale to zero, `AINOORU_HOSTED=1`. In hosted mode every browser gets its own SQLite database in memory, keyed by a random cookie id (the oldest are dropped past 500). The Groq key is read from the local `.env` at deploy time and passed as a Modal secret; without it the photo option is hidden.
 
 ## Limitations
 

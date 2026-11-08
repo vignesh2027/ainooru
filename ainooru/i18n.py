@@ -23,6 +23,14 @@ S: dict[str, dict[str, str]] = {
         "ta": "இது மின் ஆற்றல் கட்டணம் மட்டுமே. நிலைக் கட்டணம் உங்கள் இணைப்புச் சுமையைப் பொறுத்தது; 500க்கு இருபுறமும் "
               "ஒன்றே என்பதால் சேர்க்கப்படவில்லை. அளவீடுகள் இந்தக் கணினியிலேயே சேமிக்கப்படும்.",
     },
+    "footer_hosted": {
+        "en": "Energy charges only. Fixed charges depend on your connected load and are the same on both sides of 500, "
+              "so they are left out. This is the public demo: readings are kept in memory for this browser only and are "
+              "wiped when the demo restarts.",
+        "ta": "இது மின் ஆற்றல் கட்டணம் மட்டுமே. நிலைக் கட்டணம் உங்கள் இணைப்புச் சுமையைப் பொறுத்தது; 500க்கு இருபுறமும் "
+              "ஒன்றே என்பதால் சேர்க்கப்படவில்லை. இது பொது முன்னோட்டம்: அளவீடுகள் இந்த உலாவிக்கு மட்டும் நினைவகத்தில் "
+              "வைக்கப்பட்டு, முன்னோட்டம் மீண்டும் தொடங்கும்போது அழிக்கப்படும்.",
+    },
     "tariff_source": {"en": "Tariff source:", "ta": "கட்டண ஆதாரம்:"},
     # Setup
     "setup_h1": {"en": "One extra unit can cost ₹{cliff}.", "ta": "ஒரே ஒரு யூனிட் கூடுதலானால் ₹{cliff} அதிகம் ஆகலாம்."},

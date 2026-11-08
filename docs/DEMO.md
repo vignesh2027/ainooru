@@ -2,6 +2,8 @@
 
 Setup before recording:
 
+* Recorded on the hosted demo, https://applemacbook6sep2004--ainooru.us-east.modal.run, in a fresh browser profile (each browser gets its own household, so it starts on the setup screen). The photo step works there.
+
 * `uv run uvicorn ainooru.app:app --port 8000`, open http://localhost:8000, browser window about 1280 wide, zoom 100%.
 * Click "Start a new cycle" if a cycle is already loaded, so the recording starts on the setup screen in English.
 * Optional: put `GROQ_API_KEY` in `.env` and have a clear photo of a real meter display ready on the computer. Without a key, skip the photo step and type the reading.
