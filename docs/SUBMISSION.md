@@ -14,7 +14,7 @@ Tamil Nadu homes pay ₹478 extra for the 501st unit. Ainooru forecasts your two
 
 * Try it live: https://applemacbook6sep2004--ainooru.us-east.modal.run (click "Try it with sample readings"; the first visit after a quiet spell takes a few seconds)
 * Source code: [GITHUB REPO LINK]
-* Demo video: [YOUTUBE LINK]
+* Demo video: https://youtu.be/5YScJBcHMBs
 
 ## Team
 
@@ -117,7 +117,7 @@ python, uv, fastapi, jinja2, sqlite, numpy, pillow, httpx, svg, pytest, groq, mo
 
 ## Owner checklist before submitting
 
-* Replace [GITHUB REPO LINK] (twice) and [YOUTUBE LINK] above. The demo video is recorded (see /Users/vignesh/dev-challenges/nov/video/ainooru-demo-notes.md).
+* Replace [GITHUB REPO LINK] (twice) and https://youtu.be/5YScJBcHMBs above. The demo video is recorded (see /Users/vignesh/dev-challenges/nov/video/ainooru-demo-notes.md).
 * Upload screenshots from `docs/screenshots/`.
 * If possible, try one real meter photo and one real cycle with your family, and add one true sentence on how it went (for example under The problem or Challenges). Do not add it if it did not happen.
 * Replace [AI-ASSISTANCE CREDITS LINE] in Credits.
