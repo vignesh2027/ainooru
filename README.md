@@ -4,9 +4,9 @@
 
 **Stay under 500 units.** Ainooru (ஐநூறு, Tamil for "five hundred") forecasts a Tamil Nadu household's two-month electricity cycle from a few meter readings. It tells the family, before the meter reader comes, whether they will cross the 500-unit line and what crossing it would cost.
 
-**Live demo:** https://applemacbook6sep2004--ainooru.us-east.modal.run
+**Live demo:** https://ainooru.140-245-16-129.sslip.io
 
-The demo runs on one small Modal container that sleeps when idle, so the first visit can take a few seconds. Each browser gets its own household, kept in server memory only and wiped when the demo restarts; nothing is written to disk. The meter-photo option is switched on: a photo is shrunk, sent to the open vision model on Groq, and not kept.
+The demo runs in one small container on an Oracle Cloud Always Free VM. Each browser gets its own household, kept in server memory only and wiped when the demo restarts; nothing is written to disk. The meter-photo option is switched on: a photo is shrunk, sent to the open vision model on Groq, and not kept.
 
 ## The problem
 

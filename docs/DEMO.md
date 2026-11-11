@@ -2,7 +2,7 @@
 
 Setup before recording:
 
-* Recorded on the hosted demo, https://applemacbook6sep2004--ainooru.us-east.modal.run, in a fresh browser profile (each browser gets its own household, so it starts on the setup screen). The photo step works there.
+* Recorded on the hosted demo, https://ainooru.140-245-16-129.sslip.io, in a fresh browser profile (each browser gets its own household, so it starts on the setup screen). The photo step works there.
 
 * `uv run uvicorn ainooru.app:app --port 8000`, open http://localhost:8000, browser window about 1280 wide, zoom 100%.
 * Click "Start a new cycle" if a cycle is already loaded, so the recording starts on the setup screen in English.

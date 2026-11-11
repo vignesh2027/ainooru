@@ -12,7 +12,7 @@ Tamil Nadu homes pay ₹478 extra for the 501st unit. Ainooru forecasts your two
 
 ## Links
 
-* Try it live: https://applemacbook6sep2004--ainooru.us-east.modal.run (click "Try it with sample readings"; the first visit after a quiet spell takes a few seconds)
+* Try it live: https://ainooru.140-245-16-129.sslip.io (click "Try it with sample readings")
 * Source code: [GITHUB REPO LINK]
 * Demo video: https://youtu.be/5YScJBcHMBs
 
@@ -50,7 +50,7 @@ Tamil Nadu households on the LT-IA domestic tariff whose two-month use is near 5
 * **Python, managed with uv.** FastAPI serves Jinja templates rendered on the server, and the charts are plain SVG drawn by the server. There is no JavaScript framework; the browser receives HTML and CSS.
 * **Tariff engine.** Both tariff versions are stored as telescopic slab tables with exact decimal billing. Tests rebuild every slab rate as approved tariff minus Government subsidy, straight from the tables in TNERC Orders 4 and 5 of 2026.
 * **Forecaster.** It estimates the recent daily rate, weighted towards the last two weeks. NumPy then runs 4,000 simulated futures, each with day-to-day variation that persists across days, uncertainty in the rate estimate, and a random reader delay. Every path ends in whole units and an exact bill. The value of a saved unit is computed by comparing each path's bill with the same path one unit lower.
-* **Storage.** SQLite on the user's own machine. The public demo, on one small Modal container, gives each browser its own SQLite database in memory instead, so nothing is written to disk and it is wiped when the demo restarts.
+* **Storage.** SQLite on the user's own machine. The public demo, in one small container, gives each browser its own SQLite database in memory instead, so nothing is written to disk and it is wiped when the demo restarts.
 * **Languages.** English and Tamil throughout, including the chart, dates and error messages.
 * **Photo reading.** The `qwen/qwen3.8-27b` model on Groq's free tier, behind a feature switch. Without a key it is simply hidden.
 
@@ -98,7 +98,7 @@ uv sync
 uv run uvicorn ainooru.app:app --port 8000
 ```
 
-Or skip setup and use the live demo: https://applemacbook6sep2004--ainooru.us-east.modal.run
+Or skip setup and use the live demo: https://ainooru.140-245-16-129.sslip.io
 
 Open http://localhost:8000 and click "Try it with sample readings". Run the tests with `uv run pytest`. Photo reading is optional and needs a free Groq key in `.env` (see `.env.example`).
 
@@ -112,7 +112,7 @@ python, uv, fastapi, jinja2, sqlite, numpy, pillow, httpx, svg, pytest, groq, mo
 * Data: UCI Individual household electric power consumption (Hebrail and Berard, 2006, CC BY 4.0).
 * Tariff: TNERC Orders No. 4 and No. 5 of 2026.
 * Optional photo reading: the open Qwen model hosted by Groq.
-* Hosting for the public demo: Modal.
+* Hosting for the public demo: an Oracle Cloud Always Free VM (Docker behind Caddy); `modal_app.py` is kept as an alternative host.
 * [AI-ASSISTANCE CREDITS LINE]
 
 ## Owner checklist before submitting
