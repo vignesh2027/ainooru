@@ -6,7 +6,7 @@ Ainooru (ஐநூறு) is Tamil for "five hundred", the bimonthly unit limit 
 
 The owner is a final-year CSE student in Chennai. The ideas below all come from problems in that life: the household electricity bill, campus placement season, the monsoon commute, the final-year viva and hostel food. Each one has a person we can name as the user.
 
-Hard constraints from the brief: the idea must be new (not Padi, Kavach, Haat or Merged), demoable in 2 minutes, free to run with no card, honest about numbers, and built in Python or Go with server-rendered HTML.
+Hard constraints from the brief: the idea must be new, demoable in 2 minutes, free to run with no card, honest about numbers, and built in Python or Go with server-rendered HTML.
 
 ## Five candidates
 
@@ -44,44 +44,6 @@ This would read the student's project report, ask likely viva questions, and gra
 ### 5. Mess Count: a hostel mess headcount forecaster
 
 This would predict tomorrow's mess headcount from attendance, exams and holidays so the kitchen cooks less surplus. The user is a hostel mess manager.
-
-## Scoring
-
-The four judging criteria, quoted verbatim from the rules page:
-
-* **Innovation & Originality:** "How original is the idea or approach? Does the project offer a fresh solution, thoughtful improvement, or creative use of technology?"
-* **Usefulness & Impact:** "How clearly does the project address a real problem or opportunity? Consider its value to the intended users, evidence of user needs, and potential positive impact."
-* **Implementation & Functionality:** "How well does the working prototype deliver its core promise? Consider functionality, thoughtful technical choices, reliability, and what the team built during the event. Complexity alone does not earn a higher score."
-* **Design & Presentation:** "Is the project understandable and easy to use? Consider accessibility, the clarity of the user experience, and how clearly the submission explains the problem, solution, demo, and limitations."
-
-The fifth column, **Gallery originality**, is my own check. The LaunchPad gallery is unpublished, so this column compares each idea against the visible galleries of comparable ended events listed in RULES.md (Hack to the Future, Neighborhood Hacks 2026, Student Innovators Without Borders). Each score is 1 to 5. The first four columns are what judges add up; the fifth breaks ties between my own options.
-
-| Candidate | Innovation | Usefulness | Implementation | Design | Judged total (of 20) | Gallery originality | Total (of 25) |
-|---|---|---|---|---|---|---|---|
-| 1. Ainooru | 5 | 5 | 4 | 5 | **19** | 5 | **24** |
-| 2. Drive Desk | 3 | 4 | 4 | 4 | 15 | 2 | 17 |
-| 3. Subway Sense | 4 | 4 | 2 | 3 | 13 | 4 | 17 |
-| 4. Viva Mock | 3 | 3 | 4 | 4 | 14 | 2 | 16 |
-| 5. Mess Count | 2 | 3 | 3 | 3 | 11 | 2 | 13 |
-
-### Reasons behind the scores
-
-**Ainooru.**
-* Innovation 5. No student tool I found treats a subsidy cliff as a decision problem under uncertainty. The idea of a "price of one saved unit" that swings from Rs 6 to hundreds of rupees is new to most people and easy to state.
-* Usefulness 5. The cliff is in force now, applies to about 2 crore domestic connections, and costs a real household Rs 478 or more for one unit. The press coverage gives evidence of need. My own family can try it this week.
-* Implementation 4. The tariff engine is exact and testable against published worked examples, and the forecaster is a small, honest Monte Carlo. The risk is calibration, which the evaluation plan below covers.
-* Design 5. The core screen holds one number, one chart and one sentence of advice. Tamil labels make it usable by the actual user.
-* Gallery originality 5. No comparable gallery has anything on utility tariffs.
-
-**Drive Desk.** Usefulness is real, but the idea is a cousin of "Google Classroom: Hidden Deadlines" and many deadline trackers, and it needs real notices that contain classmates' data. Gallery originality is 2.
-
-**Subway Sense.** The idea is strong, but no public ground truth for closures exists, so accuracy cannot be shown honestly. The demo also depends on it raining on the day. Implementation is 2.
-
-**Viva Mock.** It is useful, but it falls in the crowded space of automated tutors and mock interviewers. Gallery originality is 2.
-
-**Mess Count.** It needs data from a real mess that I do not have, and food-waste dashboards are common.
-
-**Choice: Ainooru.** It has the highest total, and it also wins the event's first tie-breaker, Usefulness & Impact. It wins the second tie-breaker too, because its core, the tariff engine and forecaster, is verifiable by tests and a backtest instead of by trust.
 
 ## Name search (4 Nov 2026)
 

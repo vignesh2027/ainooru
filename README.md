@@ -36,7 +36,7 @@ The same screen in Tamil: [docs/screenshots/dashboard-tamil.png](docs/screenshot
 You need [uv](https://docs.astral.sh/uv/). It installs the right Python for you.
 
 ```sh
-git clone <this repository> ainooru
+git clone https://github.com/vignesh2027/ainooru ainooru
 cd ainooru
 uv sync
 uv run uvicorn ainooru.app:app --port 8000

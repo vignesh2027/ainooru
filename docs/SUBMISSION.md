@@ -8,17 +8,17 @@ Ainooru
 
 ## Short pitch (tagline)
 
-Tamil Nadu homes pay ₹478 extra for the 501st unit. Ainooru forecasts your two-month cycle from a few meter readings and tells you, before the reader comes, whether you will cross 500 and what to do about it.
+Tamil Nadu homes pay ₹478 extra for the 501st unit. Ainooru forecasts your two-month cycle from a few meter readings and tells you whether you will cross 500, and what to do about it.
 
 ## Links
 
 * Try it live: https://ainooru.140-245-16-129.sslip.io (click "Try it with sample readings")
-* Source code: [GITHUB REPO LINK]
+* Source code: https://github.com/vignesh2027/ainooru
 * Demo video: https://youtu.be/5YScJBcHMBs
 
 ## Team
 
-Solo: Vigneshwar (final-year CSE student, Chennai).
+Vigneshwar L (solo), final-year CSE student, Takshashila University, Chennai.
 
 ## The problem
 
@@ -92,7 +92,7 @@ Everything in the repository was built during LaunchPad Hacks, starting 4 Nov 20
 ## Setup steps (for judges)
 
 ```sh
-git clone [GITHUB REPO LINK] ainooru
+git clone https://github.com/vignesh2027/ainooru ainooru
 cd ainooru
 uv sync
 uv run uvicorn ainooru.app:app --port 8000
@@ -104,7 +104,7 @@ Open http://localhost:8000 and click "Try it with sample readings". Run the test
 
 ## Built with
 
-python, uv, fastapi, jinja2, sqlite, numpy, pillow, httpx, svg, pytest, groq, modal
+python, uv, fastapi, jinja2, sqlite, numpy, pillow, httpx, svg, pytest, groq, docker, caddy, oracle-cloud
 
 ## Credits
 
@@ -113,11 +113,4 @@ python, uv, fastapi, jinja2, sqlite, numpy, pillow, httpx, svg, pytest, groq, mo
 * Tariff: TNERC Orders No. 4 and No. 5 of 2026.
 * Optional photo reading: the open Qwen model hosted by Groq.
 * Hosting for the public demo: an Oracle Cloud Always Free VM (Docker behind Caddy); `modal_app.py` is kept as an alternative host.
-* [AI-ASSISTANCE CREDITS LINE]
-
-## Owner checklist before submitting
-
-* Replace [GITHUB REPO LINK] (twice) and https://youtu.be/5YScJBcHMBs above. The demo video is recorded (see /Users/vignesh/dev-challenges/nov/video/ainooru-demo-notes.md).
-* Upload screenshots from `docs/screenshots/`.
-* If possible, try one real meter photo and one real cycle with your family, and add one true sentence on how it went (for example under The problem or Challenges). Do not add it if it did not happen.
-* Replace [AI-ASSISTANCE CREDITS LINE] in Credits.
+* AI assistance: the code and documentation were written with help from AI coding assistants (Claude Code). I directed the work, reviewed it and ran the tests myself. The demo video narration is synthetic speech (Kokoro 82M text to speech, voice af_heart), not my own voice. The photo reading feature calls the open Qwen model hosted by Groq. The video was recorded before the demo moved hosts, so its closing card still shows an old Modal address; the working demo is the link above.
